@@ -32,14 +32,36 @@ class Member(db.Model):
     email=db.Column(db.String(30),unique=True)
     join_date=db.Column(db.DateTime)
 
+    #one to many with order table
+    orders=db.relationship('Order',backref='member', lazy='dynamic')
+
+    #many to many with course table
+    courses=db.relationship('Course',secondary='member_course',backref='member',lazy='dynamic')
+
     def __rep__(self):
         return '<Member %r>' % self.username
 
-db.create_all()
-today=date.today()
+class Order(db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    price=db.Column(db.Integer)
+    member_id=db.Column(db.Integer,db.ForeignKey('member.id'))
 
-Serge=Member(username="serge10",password='secreter',email='sergeant@gmail.com',join_date=today)
-db.session.add(Serge)
-db.session.commit()
+class Course(db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String(50))
+
+#Mapping table
+db.Table('member_course',
+    db.Column('member_id',db.Integer,db.ForeignKey('member.id')),
+    db.Column('course_id',db.Integer,db.ForeignKey('course.id'))
+    )
+
+
+#db.create_all()
+#today=date.today()
+
+#Serge=Member(username="serge10",password='secreter',email='sergeant@gmail.com',join_date=today)
+#db.session.add(Serge)
+#db.session.commit()
 
 
