@@ -1,0 +1,38 @@
+Connection URI Format
+For a complete list of connection URIs head over to the SQLAlchemy documentation under (Supported Databases). This here shows some common connection strings.
+
+SQLAlchemy indicates the source of an Engine as a URI combined with optional keyword arguments to specify options for the Engine. The form of the URI is:
+
+dialect+driver://username:password@host:port/database
+Many of the parts in the string are optional. If no driver is specified the default one is selected (make sure to not include the + in that case).
+
+Postgres:
+
+postgresql://scott:tiger@localhost/mydatabase
+MySQL:
+
+mysql://scott:tiger@localhost/mydatabase
+Oracle:
+
+oracle://scott:tiger@127.0.0.1:1521/sidname
+SQLite (note the four leading slashes):
+
+sqlite:////absolute/path/to/foo.db
+Using custom MetaData and naming conventions
+You can optionally construct the SQLAlchemy object with a custom MetaData object. This allows you to, among other things, specify a custom constraint naming convention. Doing so is important for dealing with database migrations (for instance using alembic as stated here. Since SQL defines no standard naming conventions, there is no guaranteed nor effective compatibility by default among database implementations. You can define a custom naming convention like this as suggested by the SQLAlchemy docs:
+
+from sqlalchemy import MetaData
+from flask import Flask
+from flask.ext.sqlalchemy import SQLAlchemy
+
+convention = {
+    "ix": 'ix_%(column_0_label)s',
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s"
+}
+
+metadata = MetaData(naming_convention=convention)
+db = SQLAlchemy(app, metadata=metadata)
+For more info about MetaData, check out the official docs on it.
