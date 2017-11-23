@@ -18,8 +18,12 @@ oracle://scott:tiger@127.0.0.1:1521/sidname
 SQLite (note the four leading slashes):
 
 sqlite:////absolute/path/to/foo.db
+
 Using custom MetaData and naming conventions
-You can optionally construct the SQLAlchemy object with a custom MetaData object. This allows you to, among other things, specify a custom constraint naming convention. Doing so is important for dealing with database migrations (for instance using alembic as stated here. Since SQL defines no standard naming conventions, there is no guaranteed nor effective compatibility by default among database implementations. You can define a custom naming convention like this as suggested by the SQLAlchemy docs:
+You can optionally construct the SQLAlchemy object with a custom MetaData object. This allows you to, among other things, specify a custom constraint naming convention. 
+Doing so is important for dealing with database migrations (for instance using alembic as stated here. 
+Since SQL defines no standard naming conventions, there is no guaranteed nor effective compatibility by default among 
+database implementations. You can define a custom naming convention like this as suggested by the SQLAlchemy docs:
 
 from sqlalchemy import MetaData
 from flask import Flask
